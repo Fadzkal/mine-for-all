@@ -488,10 +488,10 @@ export default function DetailDrawer({
   // WIUP polygons (KSP BIG)
   if (layer.id === "momi-wiup") {
     const p = properties;
-    const company = p.name !== "-" ? p.name : p.issuer;
-    const type = p.permitType;
-    const commodity = p.commodity;
-    const sk = p.permitNumber;
+    const company = (p.name !== "-" ? p.name : p.issuer) as string | undefined;
+    const type = p.permitType as string | undefined;
+    const commodity = p.commodity as string | undefined;
+    const sk = p.permitNumber as string | undefined;
     const haText = p.areaHa
       ? `${Number(p.areaHa).toLocaleString("id-ID")} ha`
       : null;
@@ -506,19 +506,19 @@ export default function DetailDrawer({
         </button>
         <h2 className="m-0 mb-1.5 text-base">{t(`layerNames.${layer.id}`)}</h2>
         <dl className="m-0 [&_dd]:m-0 [&_dt]:mt-[0.6rem] [&_dt]:text-[0.75rem] [&_dt]:uppercase [&_dt]:tracking-[0.04em] [&_dt]:text-muted">
-          {company && company !== "-" && (
+          {Boolean(company && company !== "-") && (
             <div>
               <dt>{t("fieldCompany")}</dt>
               <dd className="font-medium">{String(company)}</dd>
             </div>
           )}
-          {type && type !== "-" && (
+          {Boolean(type && type !== "-") && (
             <div>
               <dt>{t("fieldPermitType")}</dt>
               <dd>{String(type)}</dd>
             </div>
           )}
-          {commodity && commodity !== "-" && (
+          {Boolean(commodity && commodity !== "-") && (
             <div>
               <dt>{t("fieldCommodity")}</dt>
               <dd>{String(commodity)}</dd>
@@ -530,7 +530,7 @@ export default function DetailDrawer({
               <dd>{haText}</dd>
             </div>
           )}
-          {sk && sk !== "-" && (
+          {Boolean(sk && sk !== "-") && (
             <div>
               <dt>{t("fieldPermitNumber")}</dt>
               <dd className="text-[0.82rem] leading-snug">{String(sk)}</dd>
