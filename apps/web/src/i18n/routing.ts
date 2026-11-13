@@ -1,0 +1,26 @@
+import { defineRouting } from "next-intl/routing";
+
+export const routing = defineRouting({
+  locales: ["id", "en"],
+  defaultLocale: "id",
+  pathnames: {
+    "/": "/",
+    "/tentang": { id: "/tentang", en: "/about" },
+    "/kampanye": { id: "/kampanye", en: "/campaign" },
+    "/kartu": { id: "/kartu", en: "/resident-card" },
+    "/peta": { id: "/peta", en: "/map" },
+    "/biodiversitas": { id: "/biodiversitas", en: "/biodiversity" },
+    "/wilayah/[slug]": { id: "/wilayah/[slug]", en: "/regions/[slug]" },
+    "/metodologi": { id: "/metodologi", en: "/methodology" },
+    "/data": "/data",
+    "/sumber-data": { id: "/sumber-data", en: "/data-sources" },
+    "/apresiasi": { id: "/apresiasi", en: "/credits" },
+    "/proyek": { id: "/proyek", en: "/project" },
+    "/dukung": { id: "/dukung", en: "/support" },
+    "/ketentuan": { id: "/ketentuan", en: "/disclaimer" },
+    "/privasi": { id: "/privasi", en: "/privacy" },
+    "/status": "/status",
+  },
+});
+
+export type AppPathname = keyof typeof routing.pathnames;
