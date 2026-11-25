@@ -1,7 +1,11 @@
 # Mine For All
 
 <p align="center">
-  <img src="apps/web/public/images/hero_light.svg" alt="Mine For All" width="320">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="apps/web/public/images/hero_dark.svg">
+    <source media="(prefers-color-scheme: light)" srcset="apps/web/public/images/hero_light.svg">
+    <img src="apps/web/public/images/hero_dark.svg" alt="Mine For All" width="360">
+  </picture>
 </p>
 
 **Observatorium independen dan nirlaba untuk transparansi data pertambangan, kawasan lindung, dan lingkungan Indonesia.**
