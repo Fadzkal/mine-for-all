@@ -17,8 +17,10 @@ const ACK_KEY = "mr-disclaimer-ack-v1";
 export default function DisclaimerGate() {
   const t = useTranslations("gate");
   const [open, setOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     try {
       if (localStorage.getItem(ACK_KEY) !== "1") setOpen(true);
     } catch {
@@ -37,7 +39,7 @@ export default function DisclaimerGate() {
     };
   }, [open]);
 
-  if (!open) return null;
+  if (!mounted || !open) return null;
 
   const accept = () => {
     try {
@@ -53,7 +55,8 @@ export default function DisclaimerGate() {
       role="dialog"
       aria-modal="true"
       aria-label={t("title")}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4 notranslate"
+      translate="no"
     >
       <div className="absolute inset-0 bg-black/50 backdrop-blur-[2px]" />
       <div className="glass relative z-[1] w-[min(520px,100%)] animate-[panel-in_0.22s_ease] rounded-[18px] p-6 text-[0.92rem]">

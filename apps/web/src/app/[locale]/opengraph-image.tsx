@@ -183,42 +183,49 @@ export default async function OpengraphImage({
       },
     );
   } catch {
-    return new ImageResponse(
-      (
-        <div
-          style={{
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            position: "relative",
-            backgroundColor: "#0a0f0c",
-          }}
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={bg}
-            width={1200}
-            height={630}
-            alt=""
-            style={{ position: "absolute", top: 0, left: 0 }}
-          />
+    try {
+      return new ImageResponse(
+        (
           <div
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: 1200,
-              height: 630,
-              background: "rgba(6,12,9,0.72)",
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              position: "relative",
+              backgroundColor: "#0a0f0c",
             }}
-          />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={hero} width={HERO_W} height={HERO_H} alt="" style={{ position: "relative" }} />
-        </div>
-      ),
-      size,
-    );
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={bg}
+              width={1200}
+              height={630}
+              alt=""
+              style={{ position: "absolute", top: 0, left: 0 }}
+            />
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                left: 0,
+                width: 1200,
+                height: 630,
+                background: "rgba(6,12,9,0.72)",
+              }}
+            />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={hero} width={HERO_W} height={HERO_H} alt="" style={{ position: "relative" }} />
+          </div>
+        ),
+        size,
+      );
+    } catch {
+      const fallback = await readFile(join(process.cwd(), "public/images/og_background.jpg"));
+      return new Response(fallback, {
+        headers: { "Content-Type": "image/jpeg" },
+      });
+    }
   }
 }

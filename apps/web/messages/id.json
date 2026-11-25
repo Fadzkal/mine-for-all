@@ -10,7 +10,12 @@
     "analysis": "Analisis",
     "ssdm": "System Dynamics Methodology (SSDM)",
     "sources": "Sumber Data",
-    "support": "Dukung"
+    "support": "Dukung",
+    "methodology": "Metodologi",
+    "data": "Data",
+    "status": "Status",
+    "credits": "Apresiasi",
+    "biodiversity": "Biodiversitas"
   },
   "about": {
     "title": "Tentang MineForAll",

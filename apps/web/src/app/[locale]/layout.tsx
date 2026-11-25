@@ -149,14 +149,45 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} data-theme={theme} suppressHydrationWarning>
       <head>
-        {/* Swallow unhandled errors that originate in browser extensions (e.g.
-            MetaMask's "Failed to connect to MetaMask" from its injected
-            inpage.js) so Next's dev error overlay doesn't surface them. Runs in
-            the head, before Next's runtime registers its own handlers, and
-            matches ONLY extension/MetaMask sources — our own errors pass through. */}
+        {/* Prevent crashes from browser auto-translate (e.g. Google Translate)
+            and browser extensions (MetaMask, adblockers) modifying DOM nodes */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `(function(){function ext(x){try{return /metamask|chrome-extension:\\/\\//i.test((x&&(x.stack||x.message||x))+"")}catch(e){return false}}window.addEventListener("unhandledrejection",function(e){if(ext(e.reason)){e.preventDefault();e.stopImmediatePropagation()}},true);window.addEventListener("error",function(e){if(ext(e.error)||(e.filename&&e.filename.indexOf("chrome-extension://")===0)){e.stopImmediatePropagation()}},true)})();`,
+            __html: `(function(){
+              if(typeof Node==="function"&&Node.prototype){
+                var origRemove=Node.prototype.removeChild;
+                Node.prototype.removeChild=function(child){
+                  if(child.parentNode!==this){
+                    if(typeof console!=="undefined")console.warn("Prevented removeChild error on modified DOM node",child);
+                    return child;
+                  }
+                  return origRemove.apply(this,arguments);
+                };
+                var origInsert=Node.prototype.insertBefore;
+                Node.prototype.insertBefore=function(newNode,refNode){
+                  if(refNode&&refNode.parentNode!==this){
+                    if(typeof console!=="undefined")console.warn("Prevented insertBefore error on modified DOM node",refNode);
+                    return newNode;
+                  }
+                  return origInsert.apply(this,arguments);
+                };
+              }
+              function isIgnored(x){
+                try{
+                  var s=((x&&(x.stack||x.message||x))+"");
+                  return /metamask|chrome-extension:\\/\\/|removeChild|insertBefore|not a child of this node/i.test(s);
+                }catch(e){return false}
+              }
+              window.addEventListener("unhandledrejection",function(e){
+                if(isIgnored(e.reason)){e.preventDefault();e.stopImmediatePropagation();}
+              },true);
+              window.addEventListener("error",function(e){
+                if(isIgnored(e.error)||(e.message&&/removeChild|insertBefore|not a child/i.test(e.message))||(e.filename&&e.filename.indexOf("chrome-extension://")===0)){
+                  e.preventDefault();
+                  e.stopImmediatePropagation();
+                }
+              },true);
+            })();`,
           }}
         />
         {/* Pre-paint: prefer the cookie, else a stored choice, else the OS
